@@ -68,7 +68,7 @@ int main()
                 vector<unsigned int> solution;
                 chrono::high_resolution_clock::time_point t1;
                 chrono::high_resolution_clock::time_point t2;
-                cout << "Wybierz:" << endl << "1 - Dla przegladu zupelnego" << endl << "2 - Dla B&B" << endl << "3 - Dla programowania dynamicznego" << endl << "4 - Dla symulowanego wyzarzania" << endl << "5 - Dla taboo search" << endl << "6 - Dla zmiany pliku" << endl << "7 - Dla taboo i SA" << endl;
+                cout << "Wybierz:" << endl << "1 - Dla przegladu zupelnego" << endl << "2 - Dla B&B" << endl << "3 - Dla programowania dynamicznego" << endl << "4 - Dla symulowanego wyzarzania" << endl << "5 - Dla taboo search" << endl << "6 - Dla zmiany pliku" << endl << "7 - Dla taboo i SA" << endl<<"8 - Dla algoytmu mrowkowego"<<endl<<"9 - Dla algorytmu genetycznego"<<endl;
                 int x;
                 cin >> x;
                 switch (x)
@@ -149,6 +149,38 @@ int main()
                 }
                 case(6):{cout << "Podaj \"random\" dla losowych danych, lub nazwe pliku: ";
                     cin >> version; break; }
+                
+                case(8): {
+                     cout << "Podaj liczbe mrowek" << endl;
+                     unsigned int mrowki = 0;
+                     cin >> mrowki;
+                     t1 = chrono::high_resolution_clock::now();
+                     solution = salesman_ant(test,1000,mrowki);
+                     t2 = chrono::high_resolution_clock::now();
+                     cout << "Ant time: " << chrono::duration_cast<chrono::milliseconds>(t2 - t1).count() << "ms" << endl;
+                     cout << "Sciezka: " << solution << endl;
+                     cout << "Dlugosc: " << path_length(test, solution) << endl;
+                     cout << endl;
+                     break;
+                 }
+                case(9): {
+                    cout << "Podaj liczbe osobnikow" << endl;
+                    unsigned int populacja = 0;
+                    cin >> populacja;
+                    cout << endl;
+                    cout << "Podaj 0 dla mutacji A lub 1 dla mutacji B" << endl;
+                    int operator_m = 0;
+                    cin >> operator_m;
+                    cout << endl;
+                    t1 = chrono::high_resolution_clock::now();
+                    solution = salesman_genetic(test, operator_m == 0?mutation_a:mutation_b , crossover_a, 1000, populacja);
+                    t2 = chrono::high_resolution_clock::now();
+                    cout << "Genetic time: " << chrono::duration_cast<chrono::milliseconds>(t2 - t1).count() << "ms" << endl;
+                    cout << "Sciezka: " << solution << endl;
+                    cout << "Dlugosc: " << path_length(test, solution) << endl;
+                    cout << endl;
+                    break;
+                }
                 }
 
             }
