@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <random>
 #include <cmath>
+#include <chrono>
 
 #include "city.h"
 #include "salesman_utility.h"
@@ -20,17 +21,17 @@ void ant_new_permutation(
 	double total_prob;
 	double slice_prob;
 
-	unsigned long long visited = 1ul;
-	unsigned long long all = (1ull << n) - 1;
+	vector<bool> visited = vector<bool>(n);
+	visited[0] = true;
 
 	unsigned int current = 0;
 	order[0] = 0;
-	unsigned int next;
+	unsigned int next = 0;
 	for (unsigned int node = 1; node < n; node++)
 	{
 		total_prob = 0.0;
-		for (unsigned int i = 0; i < n; i++)
-			if (not (visited & (1ull << i)))
+		for (unsigned int i = 1; i < n; i++)
+			if (not visited[i])
 			{
 				prob[i] = 
 					pow(max(pheromone[current][i], 0.0001f), 0.9) / 
@@ -38,30 +39,30 @@ void ant_new_permutation(
 				total_prob += prob[i];
 			}
 		slice_prob = uniform_real_distribution<double>(0.0, total_prob)(rd);
-		for (unsigned int i  = 0; i < n; i++)
-			if (not (visited & (1ull << i)))
+		for (unsigned int i  = 1; i < n; i++)
+			if (not visited[i])
 			{
 				next = i;
 				if (slice_prob <= prob[i]) break;
 				slice_prob -= prob[i];
 			}
-		visited |= (1ull << next);
+		visited[next] = true;
 		order[node] = current = next;
 	}
 }
 vector<unsigned int> salesman_ant(
 	vector<city> locations,
-	long long iterations,
-	long long ants,
+	unsigned long long time,
+	unsigned long long ants,
 	float pheromon,
 	float evaporation)
 {
-	return salesman_ant(precalculate_distances(locations), iterations, ants, pheromon, evaporation);
+	return salesman_ant(precalculate_distances(locations), time, ants, pheromon, evaporation);
 }
 vector<unsigned int> salesman_ant(
 	vector<vector<int>> distances,
-	long long iterations,
-	long long ants,
+	unsigned long long time,
+	unsigned long long ants,
 	float pheromon,
 	float evaporation)
 {
@@ -81,7 +82,8 @@ vector<unsigned int> salesman_ant(
 	for (unsigned int i = 0; i < n; i++)
 		ant_pheromone[i] = vector<float>(n, 0.0f);
 
-	for (unsigned int iteration = 0; iteration < iterations; iteration++)
+	chrono::high_resolution_clock::time_point start = chrono::high_resolution_clock::now();
+	while (chrono::duration_cast<chrono::milliseconds>(chrono::high_resolution_clock::now() - start).count() < time)
 	{
 		for (unsigned int i = 0; i < ants; i++)
 		{

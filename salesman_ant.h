@@ -5,19 +5,20 @@
 #include <cstdlib>
 #include <random>
 #include <cmath>
+#include <chrono>
 
 #include "city.h"
 #include "salesman_utility.h"
 
 vector<unsigned int> salesman_ant(
 	vector<city> locations,
-	long long iterations = 1000,
-	long long ants = 50,
+	unsigned long long time = 60000,
+	unsigned long long ants = 50,
 	float pheromon = 10.0,
 	float evaporation = 0.9);
 vector<unsigned int> salesman_ant(
 	vector<vector<int>> distances,
-	long long iterations = 1000,
-	long long ants = 50,
+	unsigned long long time = 60000,
+	unsigned long long ants = 50,
 	float pheromon = 10.0,
 	float evaporation = 0.9);

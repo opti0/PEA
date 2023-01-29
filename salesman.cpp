@@ -154,32 +154,40 @@ int main()
                      cout << "Podaj liczbe mrowek" << endl;
                      unsigned int mrowki = 0;
                      cin >> mrowki;
-                     t1 = chrono::high_resolution_clock::now();
-                     solution = salesman_ant(test,1000,mrowki);
-                     t2 = chrono::high_resolution_clock::now();
-                     cout << "Ant time: " << chrono::duration_cast<chrono::milliseconds>(t2 - t1).count() << "ms" << endl;
+                     unsigned int czas = 0;
+                     cout << "Podaj czas wykonywania algorytmu w sekundach" << endl;
+                     cin >> czas;
+                     solution = salesman_ant(test, czas*1000, mrowki);
                      cout << "Sciezka: " << solution << endl;
-                     cout << "Dlugosc: " << path_length(test, solution) << endl;
+                     cout << "Dlugosc: " <<path_length(test, solution) << endl;
                      cout << endl;
                      break;
                  }
                 case(9): {
                     cout << "Podaj liczbe osobnikow" << endl;
                     unsigned int populacja = 0;
+                    unsigned int czas = 0;
+                    double mutacja = 0;
+                    double krzyzowanie = 0;
                     cin >> populacja;
                     cout << endl;
                     cout << "Podaj 0 dla mutacji A lub 1 dla mutacji B" << endl;
                     int operator_m = 0;
                     cin >> operator_m;
                     cout << endl;
-                    t1 = chrono::high_resolution_clock::now();
-                    solution = salesman_genetic(test, operator_m == 0?mutation_a:mutation_b , crossover_a, 1000, populacja);
-                    t2 = chrono::high_resolution_clock::now();
-                    cout << "Genetic time: " << chrono::duration_cast<chrono::milliseconds>(t2 - t1).count() << "ms" << endl;
+                    cout << "Podaj wspolczynnik mutacji (0-1)" << endl;      
+                    cin >> mutacja;
+                    cout << endl;
+                    cout << "Podaj wspolczynnik krzyzowania (0-1)" << endl;
+                    cin >> krzyzowanie;
+                    cout << endl;
+                    cout << "Podaj liczbe czas wykonywania algorytmu [s]:" << endl;
+                    cin >> czas;
+                    solution = salesman_genetic(test, operator_m == 0 ? mutation_a : mutation_b, crossover_a, czas*1000, populacja, krzyzowanie, mutacja);
                     cout << "Sciezka: " << solution << endl;
                     cout << "Dlugosc: " << path_length(test, solution) << endl;
-                    cout << endl;
-                    break;
+                    cout << endl;                 
+                break;
                 }
                 }
 
